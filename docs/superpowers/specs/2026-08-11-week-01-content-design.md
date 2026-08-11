@@ -6,6 +6,29 @@ Week 01 will establish HireNudge as a credible source of decision support for In
 
 This specification defines the research, selection and channel-planning system. It does not approve a topic, hook, script, caption or product claim.
 
+## Strategy V2 reference boundary
+
+`HireNudge Social Media Strategy V2 – August 2026.docx` is an advisory strategy source for channel roles, product-claim controls, funnel-aware CTAs, measurement and learning gates. The native Week 01 Sheet and Docs remain the operational source of truth, and the repository operating rules remain authoritative when the sources conflict.
+
+Week 01 adopts these Strategy V2 principles:
+
+- each asset delivers one clear applicant decision, one useful action or one truthful product demonstration;
+- real screens, source evidence, accurate capability status and explicit limitations are creative advantages;
+- channel output is judged by its assigned job and funnel stage, not by reach alone;
+- CTAs must match a real destination and the capability shown;
+- no series is scaled or rejected from one execution; and
+- YouTube is a phase-two channel after Day 30, using a proven evergreen treatment rather than automatic cross-posting.
+
+Week 01 does not adopt Strategy V2's three-originals-per-week or 12-anchor Month-1 quota, its one-third product-proof quota, or any cadence as a guaranteed performance rule. Those remain hypotheses for later capacity and experiment planning.
+
+The strategy's external evidence is interpreted narrowly:
+
+- Meta's India findings are based on Meta-commissioned IPSOS studies and support Reels as a directional discovery hypothesis, not a HireNudge reach forecast.
+- LinkedIn's cited research concerns B2B marketing and buyer behaviour. It supports human-led expertise and product-proof tests, not assumptions about Indian fresher behaviour.
+- X's official guidance supports concise, conversational, media-aware posts and test-and-learn practice; it does not establish HireNudge's posting cadence.
+- YouTube's official guidance supports original, authentic treatment and warns against repetitive or mass-produced output. The Day-30 sequencing is HireNudge's operating hypothesis, not a platform requirement.
+- Huntr's Q1 2026 report is useful third-party job-search evidence but is not an India-specific or fresher-specific labour-market sample. Its statistics require source and sample qualification and cannot be generalised to the Week 01 audience without additional evidence.
+
 ## Current operational state
 
 - The native Google Sheet is the operational index, and the linked Google Docs hold research and production detail.
@@ -19,6 +42,7 @@ This specification defines the research, selection and channel-planning system. 
 - Primary audience: a broad mix of Indian tech and non-tech final-year students, recent graduates and freshers.
 - Hiring-route focus: global remote and contractor work that an applicant based in India may realistically consider.
 - The content must distinguish worldwide remote work from country-limited remote work and must not imply eligibility when the source does not establish it.
+- Strategy V2 treats international-opportunity exploration as an audience hypothesis, not a verified HireNudge product advantage. Week 01 therefore remains source-led education unless a relevant product capability and destination are separately verified.
 
 ## Evidence inputs
 
@@ -51,7 +75,7 @@ The three candidates will be evaluated on five dimensions:
 | Applicant-decision value | 25% | Does the input help a fresher make a specific, consequential choice? |
 | Route and eligibility clarity | 20% | Can the remote or contractor route and its restrictions be explained accurately? |
 | Freshness | 15% | Is the input timely enough for Week 01 production and publication? |
-| Cross-channel usefulness | 10% | Can the same central decision support genuinely native treatments on all four channels? |
+| Cross-channel usefulness | 10% | Can the same central decision support genuinely native treatments on the three Week 01 launch channels and, if proven, a later YouTube treatment? |
 
 A candidate fails regardless of score if its central claim cannot be sourced, the role's availability or eligibility cannot be checked, consent is missing for a case or contribution, or the treatment would require individual legal, tax, visa or employment advice.
 
@@ -73,14 +97,14 @@ The sequence is:
 
 ## Lean-launch architecture
 
-Week 01 has four mandatory anchor assets and up to four conditional extensions. Eight assets are a ceiling, not a production obligation.
+Week 01 has three mandatory anchor assets and up to three conditional extensions. Six assets are a ceiling, not a production obligation. YouTube production is deferred until the post-Day-30 evidence gate in Strategy V2.
 
-| Channel | Mandatory anchor | Conditional extension |
-| --- | --- | --- |
-| LinkedIn | `HN-W01-LI-CAR-01` — application-autopsy document carousel | `HN-W01-LI-TXT-01` — evidence-led text or collaborative post |
-| YouTube | `HN-W01-YT-LONG-01` — human-narrated 8–12 minute decision guide | `HN-W01-YT-SHORT-01` — short focused on one decisive clause or misunderstanding |
-| Instagram | `HN-W01-IG-REEL-01` — fast role-verdict Reel | `HN-W01-IG-CAR-01` — saveable decision-checklist carousel |
-| X | `HN-W01-X-THREAD-01` — sourced short thread | `HN-W01-X-SHOT-02` — annotated source or job-description screenshot |
+| Channel | Mandatory anchor | Conditional extension | Week 01 treatment |
+| --- | --- | --- | --- |
+| LinkedIn | `HN-W01-LI-CAR-01` — application-autopsy document carousel | `HN-W01-LI-TXT-01` — evidence-led text or collaborative post | Launch channel |
+| Instagram | `HN-W01-IG-REEL-01` — fast role-verdict Reel | `HN-W01-IG-CAR-01` — saveable decision-checklist carousel | Launch channel |
+| X | `HN-W01-X-THREAD-01` — sourced short thread | `HN-W01-X-SHOT-02` — annotated source or job-description screenshot | Launch channel |
+| YouTube | None | None | Keep all Week 01 YouTube assets in `Research backlog`; reassess after Day 30 |
 
 An extension proceeds only when it has a distinct Hook Key, a format-native purpose, a non-duplicative argument and enough production capacity for the same evidence and trust review as an anchor. Otherwise it stays in `Research backlog`.
 
@@ -101,21 +125,16 @@ Anchor workflow:
 
 The conditional text or collaborative post must contribute a separate professional observation. Any expert contribution requires approval and accurate attribution. The post must not summarise the carousel slide by slide.
 
-### YouTube
+### YouTube — phase-two gate
 
-Purpose: build searchable authority by answering the complete applicant decision.
+Purpose after Day 30: add evergreen search discovery only when a Week 01–Month 1 treatment proves useful on a launch channel.
 
-Anchor workflow:
-
-1. Frame one high-intent question about whether and how an Indian fresher can pursue the selected opportunity or route.
-2. Separate confirmed source facts, HireNudge analysis and unresolved uncertainty.
-3. Explain the role, route, restrictions, contractor implications, decision path and practical verification steps.
-4. Create a timecoded visual plan using primary-source screens, annotated wording and simple decision graphics.
-5. Record with human narration in natural Indian professional English.
-6. Verify that the title, thumbnail promise, script and conclusion all answer the same question.
-7. Complete source, route, read-aloud and trust review before approval.
-
-The conditional Short must stand alone around one decisive clause or misconception. It must not be a contextless extract from the long video.
+1. Keep `HN-W01-YT-LONG-01`, `HN-W01-YT-SHORT-01` and `HN-W01-YT-SHORT-02` in `Research backlog` during Week 01.
+2. After Day 30, identify a proven evergreen Reel, carousel or thread with strong qualified engagement or product signal.
+3. Rewrite it for YouTube search; do not upload an unchanged Reel or produce a long video merely to fill the registered slot.
+4. Start with one self-contained Short around a verified decision, clause or misconception.
+5. Use human narration and complete source, route, title, read-aloud and trust review.
+6. Consider long-form only after the Short or a separate search-demand review justifies the production cost.
 
 ### Instagram
 
@@ -149,7 +168,7 @@ The conditional screenshot must annotate the exact source wording used in the co
 
 ## Product-module reference rule
 
-The HireNudge module inventory is a content-creation reference, not a coverage quota. Relevant product areas in the workbook include job matching and fit explanations, Nudge Studio and application tailoring, email outreach, job tracking, interview preparation, the Dashboard and Nudge assistant, and trust topics such as job freshness and responsible AI.
+The HireNudge module inventory is a content-creation reference, not a coverage quota. Relevant product areas in the workbook include job matching and fit explanations, Resume Nudge and application tailoring, Nudge Studio, email outreach, job tracking, interview preparation, the Dashboard and Nudge assistant, and trust topics such as job freshness and responsible AI.
 
 For every asset, choose one of three treatments:
 
@@ -159,6 +178,19 @@ For every asset, choose one of three treatments:
 
 Before any product demonstration or capability claim, confirm whether the capability is verified live, in transition or proposed. Never present workbook recommendations as shipped functionality.
 
+Strategy V2 supplies the following provisional Product Truth labels. They must be re-confirmed with the current product owner or Product Truth source before publication:
+
+| Product area | Provisional status | Content boundary |
+| --- | --- | --- |
+| AI Job Matcher | Confirmed Live | Do not claim eligibility, perfect fit, freshness, explainable rationale or interview outcomes. |
+| Resume Nudge | Confirmed Live | Do not guarantee ATS results, factuality, score lift or unverified interactions. |
+| Nudge Studio | In Development | Use only as a transparent product update; do not present the redesigned editor as available. |
+| Application Tracker | Confirmed Live | Qualify automatic-update coverage; do not claim complete or real-time employer status. |
+| Interview Preparation | Confirmed Live | Do not claim exact questions, simulation, voice analysis, confidence, scores or outcomes unless separately verified. |
+| Complete workflow | Partially Live | Do not describe the experience as seamless, fully integrated, autonomous or applying for the user. |
+| Job freshness controls | In Development | Do not claim always-active, official-only or real-time inventory. |
+| International audience | Audience statement only | Do not imply remote-from-India eligibility, sponsorship, relocation, work authorisation or advice. |
+
 ## CTA policy
 
 The current production briefs contain the same default CTA on every channel. Week 01 will not force that CTA into every asset.
@@ -167,6 +199,23 @@ The current production briefs contain the same default CTA on every channel. Wee
 - Product CTAs may repeat only when accurate and appropriate.
 - Non-product CTAs may ask the audience to verify a restriction, save a checklist, watch the full explanation or contribute informed context.
 - The final CTA for each asset is recorded in its production brief and reviewed alongside the hook and argument.
+
+## Content-promise and brief fields
+
+Every produced asset must deliver exactly one primary value: a clearer applicant decision, one useful next action or one truthful product demonstration. It must also have one assigned funnel stage.
+
+Before an asset can reach `Brief ready`, its production brief must identify:
+
+- audience state and one problem;
+- single objective and funnel stage;
+- channel, format and recurring series;
+- Hook Key and one useful takeaway;
+- required source, screen, consent or evidence;
+- product capability and exact status when applicable;
+- CTA and exact destination;
+- claim or implication to avoid;
+- owner, reviewer, publish slot and Asset ID; and
+- UTM campaign and content code when a tracked destination is used.
 
 ## Reviews and failure handling
 
@@ -202,6 +251,8 @@ Secondary indicators:
 
 Follower growth and total impressions are diagnostic measures, not the main success criteria.
 
+Week 01 is a baseline, not proof of a winning series. A format must receive at least three comparable, evidence-safe executions before it is labelled a winner or stopped for performance. Review results by recurring series and Asset ID; do not rely on platform totals alone. Social-attributed activation remains a future business north star only after the activation event and tracking have been precisely defined and tested.
+
 ## Implementation boundary
 
 The next execution phase is research, not production copy. It will:
@@ -211,4 +262,12 @@ The next execution phase is research, not production copy. It will:
 3. present the comparison to Priyansh; and
 4. stop for selection.
 
-Only after selection and duplicate checks will the four anchor briefs be developed. Conditional extensions are evaluated after the anchors pass review.
+Only after selection and duplicate checks will the three launch-channel anchor briefs be developed. Conditional extensions are evaluated after the anchors pass review. YouTube remains deferred until the post-Day-30 gate.
+
+## Referenced strategy source
+
+- `HireNudge Social Media Strategy V2 – August 2026.docx`
+- Source location at review: `/Users/priyansh/Downloads/HireNudge Social Media Strategy V2 – August 2026.docx`
+- Document date: 11 August 2026
+- Reviewed visually across all 21 rendered pages
+- SHA-256 at review: `1d48ed1e6bac60b5b97f4d8090ad64b4007e8516ab76551b61a20eaeb0a175c6`
