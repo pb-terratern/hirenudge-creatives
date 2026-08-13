@@ -3,7 +3,7 @@ import { z } from "zod";
 import { channels } from "@/domain/content-system";
 import { researchIdeaCandidates } from "@/server/agents/openai";
 import { dailyBatchLocalDate } from "@/server/agents/ideation";
-import { createGenerationBatch, listIdeaWall, readIdempotentResponse, storeIdempotentResponse } from "@/server/postgres-repository";
+import { createGenerationBatch, listIdeas, readIdempotentResponse, storeIdempotentResponse } from "@/server/postgres-repository";
 import { errorResponse, requireIdempotencyKey, requireOwner } from "@/server/request";
 
 const requestSchema = z.object({ channels: z.array(z.enum(channels)).min(1), prompt: z.string().max(4000).optional() });
@@ -13,7 +13,8 @@ export async function GET(request: Request) {
     await requireOwner();
     const value = new URL(request.url).searchParams.get("channel");
     const channel = value ? z.enum(channels).parse(value) : undefined;
-    return Response.json({ ideas: await listIdeaWall(channel) });
+    const status = z.enum(["surfaced", "saved", "rejected", "validating", "needs_review", "approved", "archived"]).parse(new URL(request.url).searchParams.get("status") || "surfaced");
+    return Response.json({ ideas: await listIdeas({ channel, status }) });
   } catch (error) {
     return errorResponse(error);
   }

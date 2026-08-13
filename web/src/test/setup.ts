@@ -1,4 +1,6 @@
 import { cleanup } from "@testing-library/react";
 import { afterEach } from "vitest";
 
+process.env.NEXT_PUBLIC_DEMO_MODE = "true";
+
 afterEach(() => cleanup());

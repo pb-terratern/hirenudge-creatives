@@ -30,17 +30,31 @@ export async function createApprovedWorkspaceArtifacts(input: {
   category: string;
   format: string;
   documentBody: string;
+  existingGoogleDocId?: string | null;
+  onDocumentReady?: (document: { googleDocId: string; googleDocUrl: string }) => Promise<void>;
 }): Promise<{ googleDocId: string; googleDocUrl: string; row: number; metadataId?: number }> {
-  const { data: doc } = await input.clients.docs.documents.create({ requestBody: { title: `${trackerTabForChannel(input.channel)} · ${input.topic}` } });
-  if (!doc.documentId) throw new Error("Google Docs did not return a document ID.");
-  await input.clients.docs.documents.batchUpdate({ documentId: doc.documentId, requestBody: { requests: [{ insertText: { location: { index: 1 }, text: input.documentBody } }] } });
-  await input.clients.drive.files.update({ fileId: doc.documentId, addParents: productionFolderId, fields: "id,parents" });
-  const googleDocUrl = `https://docs.google.com/document/d/${doc.documentId}/edit`;
+  let googleDocId = input.existingGoogleDocId || undefined;
+  if (!googleDocId) {
+    const { data: doc } = await input.clients.docs.documents.create({ requestBody: { title: `${trackerTabForChannel(input.channel)} · ${input.topic}` } });
+    if (!doc.documentId) throw new Error("Google Docs did not return a document ID.");
+    googleDocId = doc.documentId;
+    await input.clients.docs.documents.batchUpdate({ documentId: googleDocId, requestBody: { requests: [{ insertText: { location: { index: 1 }, text: input.documentBody } }] } });
+    await input.clients.drive.files.update({ fileId: googleDocId, addParents: productionFolderId, fields: "id,parents" });
+  }
+  const googleDocUrl = `https://docs.google.com/document/d/${googleDocId}/edit`;
+  await input.onDocumentReady?.({ googleDocId, googleDocUrl });
   const tab = trackerTabForChannel(input.channel);
-  const append = await input.clients.sheets.spreadsheets.values.append({ spreadsheetId: operationalSheetId, range: `${tab}!A:F`, valueInputOption: "USER_ENTERED", insertDataOption: "INSERT_ROWS", requestBody: { values: [sheetRowForContent({ ...input, status: "Approved Topic", contentDocUrl: googleDocUrl })] } });
-  const row = extractSheetRowNumber(append.data.updates?.updatedRange || "");
-  const metadata = await input.clients.sheets.spreadsheets.batchUpdate({ spreadsheetId: operationalSheetId, requestBody: { requests: [{ createDeveloperMetadata: { developerMetadata: { location: { dimensionRange: { sheetId: await resolveSheetId(input.clients.sheets, tab), dimension: "ROWS", startIndex: row - 1, endIndex: row } }, visibility: "PROJECT", metadataKey: "hirenudge_content_id", metadataValue: input.contentId } } }] } });
-  return { googleDocId: doc.documentId, googleDocUrl, row, metadataId: metadata.data.replies?.[0]?.createDeveloperMetadata?.developerMetadata?.metadataId ?? undefined };
+  const existingMetadata = await input.clients.sheets.spreadsheets.developerMetadata.search({ spreadsheetId: operationalSheetId, requestBody: { dataFilters: [{ developerMetadataLookup: { metadataKey: "hirenudge_content_id", metadataValue: input.contentId, visibility: "PROJECT" } }] } });
+  let metadata = existingMetadata.data.matchedDeveloperMetadata?.[0]?.developerMetadata;
+  let row = (metadata?.location?.dimensionRange?.startIndex ?? -1) + 1;
+  if (!metadata || row < 1) {
+    const current = await input.clients.sheets.spreadsheets.values.get({ spreadsheetId: operationalSheetId, range: `${tab}!A:F` });
+    row = Math.max(2, (current.data.values?.length || 1) + 1);
+    const created = await input.clients.sheets.spreadsheets.batchUpdate({ spreadsheetId: operationalSheetId, requestBody: { requests: [{ createDeveloperMetadata: { developerMetadata: { location: { dimensionRange: { sheetId: await resolveSheetId(input.clients.sheets, tab), dimension: "ROWS", startIndex: row - 1, endIndex: row } }, visibility: "PROJECT", metadataKey: "hirenudge_content_id", metadataValue: input.contentId } } }] } });
+    metadata = created.data.replies?.[0]?.createDeveloperMetadata?.developerMetadata;
+  }
+  await updateTrackerStatusByMetadata({ sheets: input.clients.sheets, contentId: input.contentId, row: sheetRowForContent({ ...input, status: "Approved Topic", contentDocUrl: googleDocUrl }) });
+  return { googleDocId, googleDocUrl, row, metadataId: metadata?.metadataId ?? undefined };
 }
 
 async function resolveSheetId(sheets: sheets_v4.Sheets, title: string): Promise<number> {
@@ -60,4 +74,13 @@ export async function readProductTruthForModule(clients: GoogleClients, module: 
     clients.sheets.spreadsheets.values.get({ spreadsheetId: productTruthSheetId, range: "'Claims & Conflicts'!A:G" }),
   ]);
   return resolveProductTruth({ module, capabilityValues: (capabilities.data.values || []) as string[][], conflictValues: (conflicts.data.values || []) as string[][] });
+}
+
+export async function replaceProductionDocument(input: { docs: docs_v1.Docs; documentId: string; body: string }) {
+  const current = await input.docs.documents.get({ documentId: input.documentId });
+  const endIndex = current.data.body?.content?.at(-1)?.endIndex || 1;
+  const requests: docs_v1.Schema$Request[] = [];
+  if (endIndex > 2) requests.push({ deleteContentRange: { range: { startIndex: 1, endIndex: endIndex - 1 } } });
+  requests.push({ insertText: { location: { index: 1 }, text: input.body } });
+  return input.docs.documents.batchUpdate({ documentId: input.documentId, requestBody: { requests } });
 }

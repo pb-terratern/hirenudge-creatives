@@ -7,6 +7,10 @@ import { createProductionPacket } from "@/server/agents/openai";
 import { productionPacketSchema } from "@/server/agents/schemas";
 import { getDatabase } from "@/server/db";
 import { reviewProductionPacket } from "@/server/editorial";
+import { env } from "@/server/env";
+import { replaceProductionDocument, updateTrackerStatusByMetadata } from "@/server/google/operations";
+import { buildProductionDocument, sheetRowForContent } from "@/server/google/workspace";
+import { googleClientsForOwner } from "@/server/google/session";
 import { readIdempotentResponse, storeIdempotentResponse } from "@/server/postgres-repository";
 
 export async function createFirstDraft(input: { contentItemId: string; prompt: string }) {
@@ -63,7 +67,7 @@ export async function submitDraftForReview(input: { draftId: string; idempotency
   return response;
 }
 
-export async function finalApprove(input: { contentItemId: string; selectedDraftVersionId: string; idempotencyKey: string }) {
+export async function finalApprove(input: { contentItemId: string; selectedDraftVersionId: string; idempotencyKey: string; actorEmail: string }) {
   const prior = await readIdempotentResponse<unknown>(input.idempotencyKey);
   if (prior) return prior;
   const database = getDatabase();
@@ -73,6 +77,14 @@ export async function finalApprove(input: { contentItemId: string; selectedDraft
   if (!draft) throw new Error("Selected draft does not belong to this content item.");
   const production = await database.query.productionDocuments.findFirst({ where: eq(productionDocuments.contentItemId, content.id) });
   if (!production || production.syncStatus !== "synced") throw new Error("Calendar eligibility is blocked until the Google Sheet row and production Doc are synced.");
+  if (env.ENABLE_GOOGLE_WRITES !== "true" || !production.googleDocId || !production.googleDocUrl) throw new Error("Final production sync is disabled or incomplete.");
+  const packet = productionPacketSchema.parse(draft.body);
+  const productGate = content.ideaId ? await database.query.gateRuns.findFirst({ where: and(eq(gateRuns.ideaId, content.ideaId), eq(gateRuns.gateId, "G4")), orderBy: [desc(gateRuns.createdAt)] }) : undefined;
+  const gateEvidence = productGate?.evidence && typeof productGate.evidence === "object" ? productGate.evidence as { limitations?: unknown } : {};
+  const limitations = Array.isArray(gateEvidence.limitations) ? gateEvidence.limitations.filter((item): item is string => typeof item === "string") : [];
+  const clients = await googleClientsForOwner(input.actorEmail);
+  await replaceProductionDocument({ docs: clients.docs, documentId: production.googleDocId, body: buildProductionDocument({ topic: content.topic, finalCopyOrScript: packet.finalCopyOrScript, onScreenText: packet.onScreenOrSlideText, visualInstructions: packet.visualOrShotInstructions, narration: packet.narration, cta: packet.cta, sources: packet.sourceLinks, limitations }) });
+  await updateTrackerStatusByMetadata({ sheets: clients.sheets, contentId: content.id, row: sheetRowForContent({ topic: content.topic, approach: content.approach, category: content.category, format: content.format, status: "Ready", contentDocUrl: production.googleDocUrl }) });
   await database.update(draftVersions).set({ approved: true, updatedAt: new Date() }).where(eq(draftVersions.id, draft.id));
   await database.update(contentItems).set({ selectedDraftVersionId: draft.id, finalApprovedAt: new Date(), updatedAt: new Date() }).where(eq(contentItems.id, content.id));
   await database.insert(gateRuns).values({ gateId: "G8", contentItemId: content.id, draftVersionId: draft.id, decision: "passed", evaluator: "Priyansh", inputs: { version: draft.version }, evidence: {}, schemaVersion: "1" });

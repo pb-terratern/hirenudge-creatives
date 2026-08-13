@@ -1,7 +1,7 @@
 "use client";
 
 import { ArrowUpRight, Check, ChevronRight, FileUp, Link2, Plus, Search, X } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { AppShell } from "@/components/app-shell";
 import { demoIdeas, type DemoIdea } from "@/data/demo";
@@ -20,12 +20,47 @@ export default function IdeasPage() {
   const [period, setPeriod] = useState<"today" | "week" | "saved">("today");
   const [drawer, setDrawer] = useState(false);
   const [notice, setNotice] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const apiMode = process.env.NEXT_PUBLIC_DEMO_MODE !== "true";
   const wall = useMemo(
     () => ideas.filter((idea) => idea.channel === channel && idea.status === "surfaced"),
     [ideas, channel],
   );
 
-  function updateIdea(id: string, status: DemoIdea["status"], message: string) {
+  useEffect(() => {
+    if (!apiMode) return;
+    const status = period === "saved" ? "saved" : "surfaced";
+    fetch(`/api/ideas/generate?status=${status}`)
+      .then(async (response) => {
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.error || "Unable to load ideas.");
+        return result as { ideas: Array<Record<string, unknown>> };
+      })
+      .then(({ ideas: records }) => setIdeas(records.map((record) => ({
+        id: String(record.id),
+        channel: record.channel as Channel,
+        topic: String(record.topic),
+        approach: String(record.approach),
+        category: String(record.category),
+        format: String(record.format),
+        whyNow: String(record.whyNow || "Current research direction"),
+        evidence: String(record.evidenceSummary || "See the attached evidence packet."),
+        sources: [...new Set(((record.sources as Array<{ sourceGroup: string }> | undefined) || []).map((source) => source.sourceGroup))],
+        gates: ["G1 prelim pass", record.productLed ? "G2 required" : "G2 n/a"],
+        status: record.status as DemoIdea["status"],
+        g9Passed: Boolean(record.g9Passed),
+      }))))
+      .catch((error: Error) => setNotice(error.message))
+      .finally(() => setLoading(false));
+  }, [apiMode, period]);
+
+  async function updateIdea(id: string, status: DemoIdea["status"], message: string) {
+    if (apiMode) {
+      const action = status === "validating" ? "approve" : status === "saved" ? "save" : "reject";
+      const response = await fetch(`/api/ideas/${id}/${action}`, { method: "POST", headers: { "content-type": "application/json", "idempotency-key": crypto.randomUUID() }, body: action === "approve" ? JSON.stringify({}) : undefined });
+      const result = await response.json();
+      if (!response.ok) { setNotice(result.error || result.reasons?.join(" ") || "The action failed."); return; }
+    }
     setIdeas((current) => current.map((idea) => (idea.id === id ? { ...idea, status } : idea)));
     setNotice(message);
   }
@@ -62,7 +97,7 @@ export default function IdeasPage() {
               </button>
             ))}
           </div>
-          <p className="subtle text-sm">Updated 06:58 IST · Research coverage 8/8 groups</p>
+          <p className="subtle text-sm">{loading ? "Loading evidence-led ideas…" : "Research coverage 8/8 groups"}</p>
         </div>
 
         <div className="flex gap-2 overflow-x-auto border-b border-[var(--line)]" role="tablist" aria-label="Channels">
@@ -117,9 +152,9 @@ export default function IdeasPage() {
           <section role="dialog" aria-modal="true" aria-label="Generate ideas from context" className="h-full w-full max-w-2xl overflow-y-auto rounded-[24px] bg-[var(--surface)] p-6 shadow-2xl sm:p-8" onMouseDown={(event) => event.stopPropagation()}>
             <div className="flex items-start justify-between gap-4"><div><p className="eyebrow">Custom generation</p><h2 className="mt-3 font-[var(--font-serif)] text-4xl">Bring your context</h2></div><button type="button" className="grid h-11 w-11 place-items-center rounded-full border border-[var(--line)]" onClick={() => setDrawer(false)} aria-label="Close"><X size={18} /></button></div>
             <p className="subtle mt-4 max-w-xl leading-7">The same evidence, Product Truth and duplicate gates apply. Custom ideas do not reduce the daily batch.</p>
-            <form className="mt-8 space-y-6" onSubmit={(event) => { event.preventDefault(); setDrawer(false); setNotice("Custom research batch queued across all selected source groups."); }}>
-              <label className="block text-sm font-bold">Content objective or context<textarea aria-label="Content objective or context" className="mt-2 min-h-40 w-full rounded-2xl border border-[var(--line)] bg-white p-4 font-normal" placeholder="Example: Help freshers understand what a global contractor rate does not include…" /></label>
-              <fieldset><legend className="text-sm font-bold">Channels</legend><div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-4">{Object.entries(channelLabels).map(([key, label]) => <label key={key} className="flex min-h-12 items-center gap-2 rounded-xl border border-[var(--line)] px-3 text-sm"><input type="checkbox" defaultChecked={key !== "youtube"} />{label}</label>)}</div></fieldset>
+            <form className="mt-8 space-y-6" onSubmit={async (event) => { event.preventDefault(); const form = new FormData(event.currentTarget); const selectedChannels = form.getAll("channels") as Channel[]; const prompt = String(form.get("prompt") || ""); if (apiMode) { setLoading(true); const response = await fetch("/api/ideas/generate", { method: "POST", headers: { "content-type": "application/json", "idempotency-key": crypto.randomUUID() }, body: JSON.stringify({ channels: selectedChannels, prompt }) }); const result = await response.json(); setLoading(false); if (!response.ok) { setNotice(result.error || "Custom research failed."); return; } } setDrawer(false); setNotice("Custom research batch completed across all selected source groups."); }}>
+              <label className="block text-sm font-bold">Content objective or context<textarea name="prompt" aria-label="Content objective or context" className="mt-2 min-h-40 w-full rounded-2xl border border-[var(--line)] bg-white p-4 font-normal" placeholder="Example: Help freshers understand what a global contractor rate does not include…" /></label>
+              <fieldset><legend className="text-sm font-bold">Channels</legend><div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-4">{Object.entries(channelLabels).map(([key, label]) => <label key={key} className="flex min-h-12 items-center gap-2 rounded-xl border border-[var(--line)] px-3 text-sm"><input name="channels" value={key} type="checkbox" defaultChecked={key !== "youtube"} />{label}</label>)}</div></fieldset>
               <label className="block text-sm font-bold">Reference URL<div className="mt-2 flex items-center rounded-2xl border border-[var(--line)] bg-white px-4"><Link2 size={17} className="text-[var(--muted)]" /><input aria-label="Reference URL" type="url" className="min-h-12 w-full border-0 bg-transparent px-3 outline-none" placeholder="https://…" /></div></label>
               <label className="flex min-h-28 cursor-pointer flex-col items-center justify-center rounded-2xl border border-dashed border-[var(--line)] p-5 text-center text-sm font-bold"><FileUp size={22} /><span className="mt-2">Add reference files</span><span className="subtle mt-1 font-normal">PDF, DOCX, TXT, PNG, JPG or WEBP · 20 MB each</span><input aria-label="Reference files" type="file" multiple className="sr-only" accept=".pdf,.docx,.txt,.png,.jpg,.jpeg,.webp" /></label>
               <div className="rounded-2xl bg-[var(--surface-muted)] p-4"><p className="text-sm font-bold">Coverage protocol</p><p className="subtle mt-2 text-sm leading-6">Primary/official · web/news · X · LinkedIn · YouTube · Instagram · Reddit · specialist sources. Access gaps remain visible.</p></div>

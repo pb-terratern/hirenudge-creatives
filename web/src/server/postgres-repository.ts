@@ -70,9 +70,11 @@ export async function archiveExpiredIdeas(): Promise<number> {
   return archived.length;
 }
 
-export async function listIdeaWall(channel?: Channel) {
+export async function listIdeas(input: { channel?: Channel; status?: IdeaStatus } = {}) {
   const database = getDatabase();
-  return database.select().from(ideas).where(channel ? and(eq(ideas.status, "surfaced"), eq(ideas.channel, channel)) : eq(ideas.status, "surfaced")).orderBy(desc(ideas.createdAt));
+  const status = input.status || "surfaced";
+  const rows = await database.select().from(ideas).where(input.channel ? and(eq(ideas.status, status), eq(ideas.channel, input.channel)) : eq(ideas.status, status)).orderBy(desc(ideas.createdAt));
+  return Promise.all(rows.map(async (idea) => ({ ...idea, sources: await database.select().from(ideaSources).where(eq(ideaSources.ideaId, idea.id)) })));
 }
 
 export async function hasCompleteDailyBatch(localDate: string): Promise<boolean> {
