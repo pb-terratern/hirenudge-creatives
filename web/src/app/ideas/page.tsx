@@ -15,13 +15,13 @@ const channelLabels: Record<Channel, string> = {
 };
 
 export default function IdeasPage() {
-  const [ideas, setIdeas] = useState(demoIdeas);
+  const apiMode = process.env.NEXT_PUBLIC_DEMO_MODE !== "true";
+  const [ideas, setIdeas] = useState<DemoIdea[]>(apiMode ? [] : demoIdeas);
   const [channel, setChannel] = useState<Channel>("instagram");
   const [period, setPeriod] = useState<"today" | "week" | "saved">("today");
   const [drawer, setDrawer] = useState(false);
   const [notice, setNotice] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
-  const apiMode = process.env.NEXT_PUBLIC_DEMO_MODE !== "true";
+  const [loading, setLoading] = useState(apiMode);
   const wall = useMemo(
     () => ideas.filter((idea) => idea.channel === channel && idea.status === "surfaced"),
     [ideas, channel],
@@ -105,7 +105,7 @@ export default function IdeasPage() {
             const count = ideas.filter((idea) => idea.channel === key && idea.status === "surfaced").length;
             return (
               <button key={key} role="tab" aria-selected={channel === key} onClick={() => setChannel(key)} className={`min-h-12 min-w-max border-b-2 px-4 text-sm font-bold ${channel === key ? "border-[var(--coral-dark)] text-[var(--ink)]" : "border-transparent text-[var(--muted)]"}`}>
-                {channelLabels[key]} <span className="ml-1 text-xs">{count || (key === "youtube" ? "Research" : 4)}</span>
+                {channelLabels[key]} <span className="ml-1 text-xs">{key === "youtube" ? "Research" : count}</span>
               </button>
             );
           })}

@@ -7,6 +7,8 @@ const serverEnvSchema = z.object({
   OWNER_EMAIL: z.email().default("priyanshbajpai@gmail.com"),
   DATABASE_URL: z.url().optional(),
   OPENAI_API_KEY: z.string().optional(),
+  AI_GATEWAY_API_KEY: z.string().optional(),
+  VERCEL_OIDC_TOKEN: z.string().optional(),
   CRON_SECRET: z.string().min(24).optional(),
   TOKEN_ENCRYPTION_KEY: z.string().min(32).optional(),
   BLOB_READ_WRITE_TOKEN: z.string().optional(),
@@ -16,3 +18,7 @@ const serverEnvSchema = z.object({
 });
 
 export const env = serverEnvSchema.parse(process.env);
+
+export function isOperationalFlagEnabled(value: string | undefined): boolean {
+  return value === "true";
+}

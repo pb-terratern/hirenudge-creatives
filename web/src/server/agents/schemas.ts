@@ -7,7 +7,7 @@ export const sourceCoverageSchema = z.object({
   group: z.enum(researchSourceGroups),
   status: z.enum(["checked", "inaccessible", "not_relevant"]),
   references: z.array(z.url()),
-  note: z.string().optional(),
+  note: z.string().nullable(),
 });
 
 export const candidateSchema = z.object({

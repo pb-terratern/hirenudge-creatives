@@ -14,7 +14,9 @@ Required research coverage before ranking:
 
 For every source group, return checked, inaccessible or not_relevant plus original URLs and limitations. Never claim an inaccessible platform was checked. Social discussion is useful for applicant questions and language, but cannot independently prove legal, visa, labour-market or product claims.
 
-Reject generic career advice, unsupported claims, ATS folklore, artificial urgency, real-job educational teardowns, invented recruiter quotes and guaranteed outcomes. Product-led candidates must preserve Product Truth status, safe wording and limitations. Score evidence strength, applicant usefulness, freshness, channel fit and duplication risk.`;
+Do not use a real live job opening as a public example or educational content piece. Company-opening ideas may explain a verified application route or preparation decision without reproducing or tearing down an individual vacancy.
+
+Reject generic career advice, unsupported claims, ATS folklore, artificial urgency, real-job educational teardowns, invented recruiter quotes and guaranteed outcomes. Product-led candidates require current Product Truth evidence and must preserve its capability status, safe wording, limitations and conflicts. Score evidence strength, applicant usefulness, freshness, channel fit and duplication risk.`;
 }
 
 export function dailyBatchLocalDate(date: Date): string {

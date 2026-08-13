@@ -16,7 +16,7 @@ export type ResearchCoverageEntry = {
   group: ResearchSourceGroup;
   status: CoverageStatus;
   references: string[];
-  note?: string;
+  note?: string | null;
 };
 
 export function assessResearchCoverage(entries: ResearchCoverageEntry[]): {
