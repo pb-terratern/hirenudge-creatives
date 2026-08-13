@@ -10,6 +10,8 @@ Single-owner Next.js application for evidence-led content ideation, gated approv
 4. Run `npm run dev`.
 5. Connect Google Workspace from Settings. OAuth requests offline access; the encrypted refresh token stays server-side.
 
+Copy `OPERATIONAL_SHEET_ID`, `PRODUCT_TRUTH_SHEET_ID`, and `PRODUCTION_FOLDER_ID` from the authoritative repository `system/drive-manifest.json` into the deployment environment. Public demos may set `NEXT_PUBLIC_DEMO_MODE=true` and `DEMO_PUBLIC_ACCESS=true`; both must be false for the connected production tool.
+
 Google writes and daily generation are both off by default. Set `ENABLE_GOOGLE_WRITES=true` only after test Sheet/Doc verification, and `ENABLE_DAILY_GENERATION=true` only after one successful manual batch.
 
 ## Required research coverage

@@ -1,7 +1,7 @@
 import { google, type docs_v1, type drive_v3, type sheets_v4 } from "googleapis";
 
 import type { Channel } from "@/domain/content-system";
-import { operationalSheetId, productTruthSheetId, productionFolderId } from "@/server/manifest";
+import { assertWorkspaceManifestConfigured, operationalSheetId, productTruthSheetId, productionFolderId } from "@/server/manifest";
 import { resolveProductTruth } from "@/server/google/product-truth";
 import { sheetRowForContent, type TrackerStatus } from "@/server/google/workspace";
 
@@ -33,6 +33,7 @@ export async function createApprovedWorkspaceArtifacts(input: {
   existingGoogleDocId?: string | null;
   onDocumentReady?: (document: { googleDocId: string; googleDocUrl: string }) => Promise<void>;
 }): Promise<{ googleDocId: string; googleDocUrl: string; row: number; metadataId?: number }> {
+  assertWorkspaceManifestConfigured();
   let googleDocId = input.existingGoogleDocId || undefined;
   if (!googleDocId) {
     const { data: doc } = await input.clients.docs.documents.create({ requestBody: { title: `${trackerTabForChannel(input.channel)} · ${input.topic}` } });
@@ -65,10 +66,12 @@ async function resolveSheetId(sheets: sheets_v4.Sheets, title: string): Promise<
 }
 
 export async function updateTrackerStatusByMetadata(input: { sheets: sheets_v4.Sheets; contentId: string; row: [string, string, string, string, TrackerStatus, string] }) {
+  assertWorkspaceManifestConfigured();
   return input.sheets.spreadsheets.values.batchUpdateByDataFilter({ spreadsheetId: operationalSheetId, requestBody: { valueInputOption: "USER_ENTERED", data: [{ dataFilter: { developerMetadataLookup: { metadataKey: "hirenudge_content_id", metadataValue: input.contentId, visibility: "PROJECT" } }, majorDimension: "ROWS", values: [input.row] }] } });
 }
 
 export async function readProductTruthForModule(clients: GoogleClients, module: string) {
+  assertWorkspaceManifestConfigured();
   const [capabilities, conflicts] = await Promise.all([
     clients.sheets.spreadsheets.values.get({ spreadsheetId: productTruthSheetId, range: "Capabilities!A:I" }),
     clients.sheets.spreadsheets.values.get({ spreadsheetId: productTruthSheetId, range: "'Claims & Conflicts'!A:G" }),

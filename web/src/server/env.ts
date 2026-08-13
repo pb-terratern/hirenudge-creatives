@@ -12,6 +12,7 @@ const serverEnvSchema = z.object({
   BLOB_READ_WRITE_TOKEN: z.string().optional(),
   ENABLE_GOOGLE_WRITES: z.enum(["true", "false"]).default("false"),
   ENABLE_DAILY_GENERATION: z.enum(["true", "false"]).default("false"),
+  DEMO_PUBLIC_ACCESS: z.enum(["true", "false"]).default("false"),
 });
 
 export const env = serverEnvSchema.parse(process.env);

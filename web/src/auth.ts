@@ -15,6 +15,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       return isAllowedOwner(user.email, env.OWNER_EMAIL);
     },
     authorized({ auth: session }) {
+      if (env.DEMO_PUBLIC_ACCESS === "true") return true;
       if (process.env.NODE_ENV !== "production" && (process.env.E2E_BYPASS_AUTH === "true" || !env.AUTH_SECRET)) return true;
       return isAllowedOwner(session?.user?.email, env.OWNER_EMAIL);
     },

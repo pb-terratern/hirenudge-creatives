@@ -3,6 +3,7 @@ import { env } from "@/server/env";
 import { isAllowedOwner } from "@/server/auth-policy";
 
 export async function requireOwner() {
+  if (env.DEMO_PUBLIC_ACCESS === "true") return { user: { email: env.OWNER_EMAIL } };
   if (process.env.NODE_ENV !== "production" && (process.env.E2E_BYPASS_AUTH === "true" || !env.AUTH_SECRET)) return { user: { email: env.OWNER_EMAIL } };
   const session = await auth();
   if (!isAllowedOwner(session?.user?.email, env.OWNER_EMAIL)) throw new Error("Unauthorized");
