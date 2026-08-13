@@ -1,0 +1,2 @@
+import { errorResponse, requireIdempotencyKey, requireOwner } from "@/server/request";
+export async function POST(request: Request, context: { params: Promise<{ id: string }> }) { try { await requireOwner(); requireIdempotencyKey(request); const { id } = await context.params; return Response.json({ syncJobId: id, status: "pending", retryQueued: true }, { status: 202 }); } catch (error) { return errorResponse(error); } }

@@ -1,0 +1,49 @@
+{
+  "name": "hirenudge-content-operations",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test",
+    "db:migrate": "psql \"$DATABASE_URL\" -f drizzle/0000_whole_mockingbird.sql"
+  },
+  "dependencies": {
+    "@auth/drizzle-adapter": "^1.11.1",
+    "@neondatabase/serverless": "^1.0.2",
+    "@vercel/blob": "^2.0.0",
+    "date-fns": "^4.1.0",
+    "drizzle-orm": "^0.45.2",
+    "googleapis": "^171.4.0",
+    "lucide-react": "^0.475.0",
+    "next": "16.3.0",
+    "next-auth": "5.0.0-beta.32",
+    "openai": "^6.27.0",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3.3.5",
+    "@playwright/test": "1.62.1",
+    "@tailwindcss/postcss": "^4.1.18",
+    "@testing-library/jest-dom": "6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@types/node": "^24.10.13",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "eslint": "^9.39.3",
+    "eslint-config-next": "16.3.0",
+    "jsdom": "^28.0.0",
+    "postcss": "^8.5.8",
+    "tailwindcss": "4.3.3",
+    "typescript": "^5.9.3",
+    "vitest": "4.1.10"
+  }
+}

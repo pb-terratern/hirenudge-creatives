@@ -1,0 +1,273 @@
+{
+  "schemaVersion": 1,
+  "evaluationOutcomes": [
+    "Pass",
+    "Revise",
+    "Block",
+    "Not Applicable"
+  ],
+  "workflowStates": [
+    "Approved Topic",
+    "Drafting",
+    "Review",
+    "Ready"
+  ],
+  "automatedTransitions": [
+    {
+      "from": null,
+      "to": "Approved Topic",
+      "requiredGates": ["G3", "G4", "G5"]
+    },
+    {
+      "from": "Approved Topic",
+      "to": "Drafting",
+      "requiredGates": ["G1", "G2", "G5"]
+    },
+    {
+      "from": "Drafting",
+      "to": "Review",
+      "requiredGates": ["G6", "G5"]
+    },
+    {
+      "from": "Review",
+      "to": "Ready",
+      "requiredGates": ["G7", "G5"]
+    }
+  ],
+  "knownOwners": [
+    "Content Director",
+    "Research & Verification Agent",
+    "Priyansh",
+    "Content Operations Bot",
+    "Copy & Production Agent",
+    "Editorial & Trust Agent"
+  ],
+  "gates": [
+    {
+      "id": "G0",
+      "name": "Intake and scope",
+      "owner": "Content Director",
+      "appliesWhen": "Every new content request or changed brief.",
+      "checkpoint": "Before ideation.",
+      "requiredInputs": [
+        "goalOrProblem",
+        "audience",
+        "requestedConstraints"
+      ],
+      "passCriteria": [
+        "The goal or applicant problem is usable.",
+        "The audience is explicit or the approved HireNudge audience default is recorded.",
+        "Requested channel, format, country, route or module constraints are recorded without invention."
+      ],
+      "failureAction": [
+        "Ask one focused question or apply only the documented audience default.",
+        "Do not create Drive records."
+      ],
+      "allowedNextState": null
+    },
+    {
+      "id": "G1",
+      "name": "Evidence eligibility",
+      "owner": "Research & Verification Agent",
+      "appliesWhen": "Every candidate idea before it is described as approval-ready.",
+      "checkpoint": "Before Priyansh sees an approval-ready option and before drafting.",
+      "requiredInputs": [
+        "evidenceType",
+        "originalSource",
+        "verificationDate",
+        "sourceLimitations"
+      ],
+      "passCriteria": [
+        "The idea begins with an original job source, consented anonymised case, attributable recruiter observation or verified product or labour-market data.",
+        "The source, date and material limitations are available."
+      ],
+      "failureAction": [
+        "Remove or replace the candidate.",
+        "Do not send unsupported options to Priyansh as approval-ready."
+      ],
+      "allowedNextState": "Drafting"
+    },
+    {
+      "id": "G2",
+      "name": "Product Truth",
+      "owner": "Research & Verification Agent",
+      "appliesWhen": "A treatment names, shows or implies a HireNudge capability or product outcome.",
+      "checkpoint": "Before product-led ideation, before drafting and during final editorial review.",
+      "requiredInputs": [
+        "capabilityRow",
+        "truthStatus",
+        "safeWording",
+        "limitations",
+        "evidenceSource",
+        "lastVerified",
+        "claimDecision"
+      ],
+      "passCriteria": [
+        "The current Product Truth capability and related claim decision were read.",
+        "Safe wording and all limitations are preserved.",
+        "No non-live status is upgraded and no blocked claim is used."
+      ],
+      "failureAction": [
+        "Remove the product claim, narrow it to safe wording or request product-owner or production verification.",
+        "Block contradictory or unknown capability claims."
+      ],
+      "allowedNextState": ["Drafting", "Ready"]
+    },
+    {
+      "id": "G3",
+      "name": "Channel-treatment approval",
+      "owner": "Priyansh",
+      "appliesWhen": "A proposed channel treatment could become an operational record.",
+      "checkpoint": "Before any tracker row or production Doc is created.",
+      "requiredInputs": [
+        "channel",
+        "topic",
+        "approach",
+        "category",
+        "format"
+      ],
+      "passCriteria": [
+        "Priyansh explicitly approves the exact channel, topic, approach, category and format."
+      ],
+      "failureAction": [
+        "Keep the proposal in chat.",
+        "Do not issue an Operations write command."
+      ],
+      "allowedNextState": "Approved Topic"
+    },
+    {
+      "id": "G4",
+      "name": "Duplicate and reuse control",
+      "owner": "Content Director",
+      "appliesWhen": "Before artifact creation and before any later-week subject reuse.",
+      "checkpoint": "Immediately before G5 write authorisation.",
+      "requiredInputs": [
+        "approvedTreatment",
+        "existingTrackerRows",
+        "conceptKeyHistory",
+        "hookKeyHistory",
+        "parentPackHistory"
+      ],
+      "passCriteria": [
+        "The treatment does not violate active Concept Key, Hook Key or Parent Pack reuse rules.",
+        "A matching approved record is reused instead of silently duplicated."
+      ],
+      "failureAction": [
+        "Reframe the concept or reuse the matching approved record.",
+        "Refer any proposed duplicate-control replacement to the Content Systems Architect."
+      ],
+      "allowedNextState": "Approved Topic"
+    },
+    {
+      "id": "G5",
+      "name": "Operations write authorisation",
+      "owner": "Content Operations Bot",
+      "appliesWhen": "Immediately before every tracker or production-Doc mutation.",
+      "checkpoint": "Before the write, link update or status transition.",
+      "requiredInputs": [
+        "passedGateEvaluations",
+        "manifestTarget",
+        "observedTrackerSchema",
+        "readBeforeWriteResult",
+        "currentStatus",
+        "requestedStatus"
+      ],
+      "passCriteria": [
+        "Required upstream gates passed.",
+        "The live schema matches the manifest and expected six-column contract.",
+        "The operation is idempotent and the requested transition is permitted."
+      ],
+      "failureAction": [
+        "Make no mutation and preserve the current state.",
+        "Return the exact unmet condition and observed identifiers."
+      ],
+      "allowedNextState": ["Approved Topic", "Drafting", "Review", "Ready"]
+    },
+    {
+      "id": "G6",
+      "name": "Production completeness",
+      "owner": "Copy & Production Agent",
+      "appliesWhen": "A draft requests movement from Drafting to Review.",
+      "checkpoint": "Before Editorial & Trust receives the asset.",
+      "requiredInputs": [
+        "approvedChannelProposal",
+        "researchPacket",
+        "productionPacket"
+      ],
+      "passCriteria": [
+        "The production Doc contains only the final asset material, required display text, applicable visual instructions, one CTA and source links.",
+        "Narrated work specifies human narration and product wording preserves G2."
+      ],
+      "failureAction": [
+        "Keep the asset in Drafting.",
+        "Return the exact missing fields to Copy & Production."
+      ],
+      "allowedNextState": "Review"
+    },
+    {
+      "id": "G7",
+      "name": "Editorial and trust",
+      "owner": "Editorial & Trust Agent",
+      "appliesWhen": "Every asset in Review before it can become Ready.",
+      "checkpoint": "After production completeness and before final human approval.",
+      "requiredInputs": [
+        "approvedChannelProposal",
+        "researchPacket",
+        "productionPacket",
+        "productTruthPacketWhenApplicable",
+        "consentRecordWhenApplicable"
+      ],
+      "passCriteria": [
+        "Sources support material claims.",
+        "Product Truth, privacy, consent, natural language, usefulness, duplication and platform fit pass.",
+        "The Review Report explicitly returns Pass."
+      ],
+      "failureAction": [
+        "Return Revise with exact line, reason, correction and responsible role, or Block when the issue cannot be repaired.",
+        "Keep the asset in Review."
+      ],
+      "allowedNextState": "Ready"
+    },
+    {
+      "id": "G8",
+      "name": "Final human approval",
+      "owner": "Priyansh",
+      "appliesWhen": "A finished asset reaches Ready.",
+      "checkpoint": "Before any human-controlled publishing action.",
+      "requiredInputs": [
+        "readyAsset",
+        "editorialPass",
+        "finalSourceLinks"
+      ],
+      "passCriteria": [
+        "Priyansh explicitly approves the finished asset for the next human-controlled action."
+      ],
+      "failureAction": [
+        "Return the asset to the named specialist or hold it at Ready.",
+        "Do not schedule, publish or mark Published."
+      ],
+      "allowedNextState": null
+    },
+    {
+      "id": "G9",
+      "name": "YouTube phase gate",
+      "owner": "Content Director",
+      "appliesWhen": "A YouTube treatment is proposed for production or the YouTube phase is reconsidered.",
+      "checkpoint": "Before G3 approval is requested for YouTube production.",
+      "requiredInputs": [
+        "comparableShortFormExecutions",
+        "repeatableApplicantDecision",
+        "evidenceAssessment",
+        "humanProductionCapacity"
+      ],
+      "passCriteria": [
+        "At least three comparable short-form executions show a repeatable applicant decision, strong evidence and credible human production capacity."
+      ],
+      "failureAction": [
+        "Keep YouTube in research or Phase 2.",
+        "Do not treat calendar time alone as a pass."
+      ],
+      "allowedNextState": "Approved Topic"
+    }
+  ]
+}

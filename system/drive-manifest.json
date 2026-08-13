@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "account": "priyanshbajpai@gmail.com",
+  "operatingHome": "/Users/priyansh/Documents/ChatGPT/Hirenudge Creatives",
+  "strategyArchive": "/Users/priyansh/Documents/HIRE NUDGE",
+  "currentWeek": "W01",
+  "drive": {
+    "rootFolder": {
+      "name": "HireNudge Creatives",
+      "id": "1YmGS569qImWr5ht2W0WXWW6GJ6kEHZJc",
+      "url": "https://drive.google.com/drive/folders/1YmGS569qImWr5ht2W0WXWW6GJ6kEHZJc"
+    },
+    "weekFolder": {
+      "name": "Week 01",
+      "id": "12figC1OnV-Ri6wURYQVaMTa9Kxb7uoAa",
+      "url": "https://drive.google.com/drive/folders/12figC1OnV-Ri6wURYQVaMTa9Kxb7uoAa"
+    },
+    "masterSheet": {
+      "name": "HireNudge Content Tracker",
+      "id": "1OlCaxvJeUdgLvz25mvP11ZloTbQ550EzZGJXnPf6NZo",
+      "url": "https://docs.google.com/spreadsheets/d/1OlCaxvJeUdgLvz25mvP11ZloTbQ550EzZGJXnPf6NZo/edit"
+    },
+    "legacyMasterSheet": {
+      "name": "HireNudge Weekly Social Content System",
+      "id": "1ISeWTgzyWaAqPXndCO1r0FAYMqqvTz2T8uBzsZN7NgY",
+      "url": "https://docs.google.com/spreadsheets/d/1ISeWTgzyWaAqPXndCO1r0FAYMqqvTz2T8uBzsZN7NgY/edit",
+      "operationalStatus": "Legacy reference only; replaced by drive.masterSheet on 2026-08-13"
+    },
+    "productTruth": {
+      "name": "HireNudge Product Truth",
+      "id": "1LmCE-H3E6SdDURC1sOzNpYZwj2Z493hkRfusd4jTkME",
+      "url": "https://docs.google.com/spreadsheets/d/1LmCE-H3E6SdDURC1sOzNpYZwj2Z493hkRfusd4jTkME/edit"
+    },
+    "documents": {
+      "research": {
+        "name": "W01 Research and Selection",
+        "id": "1EDBi_cWaOb_0mk-QNeMAFYmTnVLOzzP5f4OY_ntkaDg",
+        "url": "https://docs.google.com/document/d/1EDBi_cWaOb_0mk-QNeMAFYmTnVLOzzP5f4OY_ntkaDg/edit"
+      },
+      "linkedin": {
+        "name": "W01 LinkedIn Production Brief",
+        "id": "1gK5SpOi-GMsSa4YIHgHCNnuzdAEDEtBUbsMpGB3ywH0",
+        "url": "https://docs.google.com/document/d/1gK5SpOi-GMsSa4YIHgHCNnuzdAEDEtBUbsMpGB3ywH0/edit"
+      },
+      "youtube": {
+        "name": "W01 YouTube Production Brief",
+        "id": "1N6b4KyE9YcjPrdQ5Xt3dJ1lVuebfXYKBBqfhkcIAoig",
+        "url": "https://docs.google.com/document/d/1N6b4KyE9YcjPrdQ5Xt3dJ1lVuebfXYKBBqfhkcIAoig/edit"
+      },
+      "instagram": {
+        "name": "W01 Instagram Production Brief",
+        "id": "1S56dVOMhWoT5x2X-eUWAusCQe-GqRQdbNpoywbhvIM8",
+        "url": "https://docs.google.com/document/d/1S56dVOMhWoT5x2X-eUWAusCQe-GqRQdbNpoywbhvIM8/edit"
+      },
+      "x": {
+        "name": "W01 X Production Brief",
+        "id": "1BuUPmW90kUXoik49SbFaXEcILdUXgGudXypCBVry5ek",
+        "url": "https://docs.google.com/document/d/1BuUPmW90kUXoik49SbFaXEcILdUXgGudXypCBVry5ek/edit"
+      }
+    }
+  }
+}

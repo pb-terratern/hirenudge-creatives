@@ -1,0 +1,32 @@
+{
+  "scenarioId": "CTS-2026-08-13-01",
+  "purpose": "Exercise G0 through G8 without a real vacancy, applicant, testimonial or personal data.",
+  "audience": "Indian tech and non-tech final-year students, recent graduates and freshers considering global remote, contractor, EOR, relocation or sponsored roles.",
+  "scope": {
+    "productModule": "Nudge Studio",
+    "employerNeutral": true,
+    "usesRealJobAsExample": false,
+    "usesPersonalData": false,
+    "narration": "Human only"
+  },
+  "evidenceBasis": {
+    "productTruthSpreadsheetId": "1LmCE-H3E6SdDURC1sOzNpYZwj2Z493hkRfusd4jTkME",
+    "capabilityRows": [
+      "Nudge Studio — General resume-readiness review",
+      "Nudge Studio — Job-specific Check & Tailor",
+      "Nudge Studio — AI-proposed text improvements with visible differences"
+    ],
+    "claimDecisions": [
+      "Resume / ATS — HireNudge's score is an ATS score or hiring probability",
+      "Resume / ATS — ATS-friendly or guaranteed ATS compatibility",
+      "Nudge Studio — AI edits preserve every fact",
+      "Nudge Studio — The redesigned Nudge Studio is available to all users"
+    ],
+    "registeredSources": ["SRC-03", "SRC-11", "SRC-12"],
+    "verifiedAt": "2026-08-13T12:35:00+05:30"
+  },
+  "deliberatelyBlockedClaim": "An 85% HireNudge score means you have an 85% chance of passing the employer's ATS.",
+  "expectedEditorialResult": "Block or Revise",
+  "safeCorrection": "Treat the indicator as HireNudge-generated guidance: inspect the specific suggestions, verify every factual change and never read the number as a hiring probability or universal ATS verdict.",
+  "driveMutationAllowedBeforeG3": false
+}

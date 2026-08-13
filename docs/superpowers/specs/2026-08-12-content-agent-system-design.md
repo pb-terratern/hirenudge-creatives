@@ -4,21 +4,21 @@
 
 Build a lean Codex project system in which Priyansh works with one Content Director. The Director coordinates five specialist agents and one operations bot to take a content request from evidence-backed ideation to a production-ready asset. The system stops at `Ready` for Priyansh's final approval and never schedules, publishes or manages replies.
 
-The system operates against the simplified HireNudge content tracker and linked production Docs. Candidate ideas and review feedback remain in chat. Only explicitly approved channel treatments may be written to Google Drive.
+The system operates against the simplified HireNudge content tracker, linked production Docs and the separate HireNudge Product Truth Sheet. The tracker controls content status and production links; Product Truth controls product-capability status, safe wording, limitations and claim decisions. Candidate ideas and review feedback remain in chat. Only explicitly approved channel treatments may be written to Google Drive.
 
-## Prerequisite
+## Implementation status
 
-The previously approved lean tracker design must be implemented before the controlled end-to-end test. Agent role files can be created first, but the Operations Bot must refuse Drive mutations unless the manifest identifies a tracker with the four expected channel tabs and the six-column schema. The tracker migration is a separate implementation phase and preserves the agreed empty-start rule; no old Week 01 content is migrated.
+The local role files, handoff contracts and G0–G9 registry are implemented. The manifest now identifies a native lean tracker with the four expected channel tabs and six-column schema. The tracker started empty and no old Week 01 content was migrated. Operations must still re-read the live schema and required gates before every mutation.
 
 ## Architecture
 
 The user-facing Content Director coordinates these internal roles:
 
 1. **Ideation Agent** — proposes three focused topic directions using approved content categories, applicant needs, verified HireNudge modules and current conversations. It cannot draft posts or write to Drive.
-2. **Research & Verification Agent** — searches authoritative web sources, official company career pages and relevant public social discussions. It returns evidence, dates, limitations and product-verification requirements, not polished copy.
+2. **Research & Verification Agent** — searches authoritative web sources, official company career pages and relevant public social discussions. For product-led work, it also returns the matching Product Truth capability row, evidence source, verification date, limitations and claim decision. It returns evidence and verification requirements, not polished copy.
 3. **Channel Strategy Agent** — converts a selected idea into exact channel treatments containing `Topic`, `Approach`, `Category` and `Format`. It recommends only channels that suit the idea.
-4. **Copy & Production Agent** — creates channel-native copy or scripts, on-screen or slide text, visual instructions, CTA and source links in natural Indian English. Human narration is mandatory for narrated content.
-5. **Editorial & Trust Agent** — checks source support, product truth, voice, usefulness, duplication, privacy, consent and platform fit. It returns `Pass`, `Revise` or `Block` and never silently changes a material claim.
+4. **Copy & Production Agent** — creates channel-native copy or scripts, on-screen or slide text, visual instructions, CTA and source links in natural Indian English. Product language must use the matching Product Truth `Safe Wording` and preserve its limitations. Human narration is mandatory for narrated content.
+5. **Editorial & Trust Agent** — checks source support, Product Truth status, safe wording, limitations, claim decision, voice, usefulness, duplication, privacy, consent and platform fit. It returns `Pass`, `Revise` or `Block` and never silently changes a material claim.
 6. **Content Operations Bot** — performs deterministic Drive work only: creating approved rows and Docs, linking them and applying permitted status changes. It cannot select ideas, rewrite content or approve claims.
 
 These are callable Codex roles, not persistent services. The Director creates bounded specialist tasks, supplies a fixed handoff packet and ends each task after its assignment. Only the Operations Bot may mutate the tracker or production Docs.
@@ -102,6 +102,8 @@ All specialist responses use one of these interfaces:
 - Real company openings are permitted only as verified alerts and cannot be used as educational examples or teardowns.
 - Before/after clinics use synthetic or explicitly consented, anonymised material only.
 - Product-led content must reverify the current capability and its limitations against the HireNudge product reference before drafting.
+- Research must cite the matching Product Truth capability row and registered source. Production must use its safe wording. Editorial must enforce its limitation and the corresponding claim decision.
+- The Content Operations Bot may read or link Product Truth but cannot edit its statuses, decisions or wording.
 - Cross-channel treatments must be independently approved and written for the channel rather than copied verbatim.
 - Version one creates no research database, agent log Sheet or approval ledger.
 
@@ -129,7 +131,7 @@ The Operations Bot must perform read-before-write checks and make mutations idem
 
 ## Project structure
 
-The implementation will add these role definitions:
+The implementation includes these role definitions:
 
 ```text
 agents/
